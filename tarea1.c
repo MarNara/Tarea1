@@ -2,7 +2,15 @@
 #include "tdas/extra.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
  //prueba
+typedef struct{
+  char name;
+  int edad;
+  int prioridad;
+}ticket;
+
 // Menú principal
 void mostrarMenuPrincipal() {
   limpiarPantalla();
@@ -21,6 +29,13 @@ void mostrarMenuPrincipal() {
 void registrar_paciente(List *pacientes) {
   printf("Registrar nuevo paciente\n");
   // Aquí implementarías la lógica para registrar un nuevo paciente
+  ticket *persona = (ticket *)malloc(sizeof(ticket));
+  printf("Ingrese el nombre");
+  scanf("%s", persona->name);
+  printf("Ingrese la edad");
+  scanf("%s", persona->edad);
+  
+
 }
 
 void mostrar_lista_pacientes(List *pacientes) {
