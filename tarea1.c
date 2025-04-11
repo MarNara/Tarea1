@@ -6,6 +6,11 @@
 
  //prueba
 
+typedef struct Node {
+  void *data;
+  struct Node *next;
+} Node;
+
 typedef struct{
   char name[100];
   int edad;
@@ -32,26 +37,27 @@ void registrar_clientes(List *clientes) {
   printf("Registrar nuevo cliente\n");
   // Aquí implementarías la lógica para registrar un nuevo paciente
   ticket *persona = (ticket *)malloc(sizeof(ticket));
-  printf("Ingrese el nombre");
+  printf("Ingrese el nombre: ");
   scanf("%s", persona->name);
-  printf("Ingrese la edad");
+  getchar();
+  printf("Ingrese la edad: ");
   scanf("%s", persona->edad);
-  list_pushBack(clientes, persona->name);
-  list_pushBack(clientes, persona->edad);
+  list_pushBack(clientes, persona);
+  
 
 }
 
 void mostrar_lista_clientes(List *clientes) {
   // Mostrar pacientes en la cola de espera
   //ticket *persona = (ticket *)malloc(sizeof(ticket));
-  Node *nodoAux;
+  Node *nodoAux = clientes;
   int total_clientes = list_size(clientes);
   printf("clientes en espera: \n");
   // Aquí implementarías la lógica para recorrer y mostrar los pacientes
-  nodoAux= clientes->head;
+  ticket *persona = (ticket *)nodoAux->data;
   for(int k = 0; k < total_clientes; k++){
-    printf("nombre: %s \n", clientes->current->persona->name);
-    clientes = clientes->next;
+    printf("Nombre: %s, Edad: %d.", persona->name, persona->edad);
+    nodoAux = nodoAux->next;
   }
 }
 
