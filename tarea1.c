@@ -42,24 +42,31 @@ void registrar_clientes(List *clientes) {
 
 }
 
+
 void asignar_Prioridad(Queue *colaAlta, Queue *colaMedia, Queue *colaBaja, ticket *persona){
+
+  printf("Asigne la prioridad: Alta es 1, Media es 2 y Baja es 3.");
+  //ingresar un dato a la cola
+  scanf("%d", &persona->prioridad);
+
   switch (persona->prioridad) {
     case 1:
-      //ingresar un dato a la cola
       queue_insert(colaAlta, persona);
+      printf("su prioridad a sido asignada como Alta");
       break;
     case 2:
       queue_insert(colaMedia, persona);
+      printf("su prioridad a sido asignada como Media");
       break;
-    case 3: 
+    case 3:
       queue_insert(colaBaja, persona);
+      printf("su prioridad a sido asignada como Media");
       break;
-    default:
-      printf("Opción invalida");
-      break;
-
+    //default:
+      //printf("Opción invalida %d", persona->prioridad);
   }
 }
+  
 
 void mostrar_lista_clientes(List *clientes) {
   // Mostrar pacientes en la cola de espera
@@ -79,13 +86,16 @@ void mostrar_lista_clientes(List *clientes) {
 int main() {
   char opcion;
   List *clientes = list_create(); // puedes usar una lista para gestionar los pacientes, general
-
+  Queue *colaAlta;
+  Queue *colaMedia;
+  Queue *colaBaja;
+  ticket* persona;
   do {
     mostrarMenuPrincipal();
     printf("Ingrese su opción: ");
     scanf(" %c", &opcion); // Nota el espacio antes de %c para consumir el
                            // newline anterior
-
+      
     switch (opcion) {
     case '1':
       registrar_clientes(clientes);
@@ -95,15 +105,11 @@ int main() {
       /*usar 3 colas, asignar prioridad, 1 ALto, 2: Medio, 3 Bajo.
       Hacer una funcion, ya que hacer el codigo aqui es mucho enredo y el main no se ve limpio */
 
-      ticket* persona = (ticket*)list_first(clientes);
-
-      //printf("Asigne la prioridad: %d", persona->prioridad);
-      
-      Queue* colaAlta = queue_create(colaAlta);
-      Queue* colaMedia = queue_create(colaMedia);
-      Queue* colaBaja = queue_create(colaBaja);
-      asignar_Prioridad(colaAlta, colaMedia, colaBaja, persona);
-      
+      persona = (ticket*)list_first(clientes);
+      queue_create(colaAlta);
+      queue_create(colaMedia);
+      queue_create(colaBaja);
+      //asignar_Prioridad(colaAlta, colaMedia, colaBaja, persona);
       break;
     case '3':
       mostrar_lista_clientes(clientes);
