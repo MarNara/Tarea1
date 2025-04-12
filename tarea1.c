@@ -34,11 +34,12 @@ void registrar_clientes(List *clientes) {
   ticket *persona = (ticket *)malloc(sizeof(ticket));
   printf("Ingrese el ID: ");
   scanf("%d", &persona->id);
-  printf("Ingrese la descripción: ");
-  scanf("%s", persona->descripcion);
   getchar();
+  printf("Ingrese la descripción: ");
+  fgets(persona->descripcion, 100, stdin);
+  persona->descripcion[strcspn(persona->descripcion, "\n")];
   list_pushBack(clientes, persona);
-  
+  printf("El cliente se a registrado con exito. \n");
 
 }
 
@@ -62,8 +63,8 @@ void asignar_Prioridad(Queue *colaAlta, Queue *colaMedia, Queue *colaBaja, ticke
       queue_insert(colaBaja, persona);
       printf("su prioridad a sido asignada como Media");
       break;
-    //default:
-      //printf("Opción invalida %d", persona->prioridad);
+    default:
+      printf("Opción invalida %d", persona->prioridad);
   }
 }
   
@@ -86,9 +87,18 @@ void mostrar_lista_clientes(List *clientes) {
 int main() {
   char opcion;
   List *clientes = list_create(); // puedes usar una lista para gestionar los pacientes, general
-  Queue *colaAlta;
+  /*Queue *colaAlta;
   Queue *colaMedia;
   Queue *colaBaja;
+  */
+  Queue *colaAlta = NULL;
+  colaAlta = queue_create(colaAlta);
+ 
+  Queue *colaMedia = NULL;
+  colaMedia = queue_create(colaMedia);
+ 
+  Queue *colaBaja = NULL;
+  colaBaja = queue_create(colaBaja);
   ticket* persona;
   do {
     mostrarMenuPrincipal();
@@ -106,10 +116,7 @@ int main() {
       Hacer una funcion, ya que hacer el codigo aqui es mucho enredo y el main no se ve limpio */
 
       persona = (ticket*)list_first(clientes);
-      queue_create(colaAlta);
-      queue_create(colaMedia);
-      queue_create(colaBaja);
-      //asignar_Prioridad(colaAlta, colaMedia, colaBaja, persona);
+      asignar_Prioridad(colaAlta, colaMedia, colaBaja, persona);
       break;
     case '3':
       mostrar_lista_clientes(clientes);
