@@ -105,6 +105,9 @@ void atender_siguiente(Queue *colaAlta, Queue *colaMedia, Queue *colaBaja, ticke
     /* code */
 }
   
+void mostrar_clientes_por_prioridad(List *clientes){
+  
+}
 
 int main() {
   char opcion;
@@ -148,7 +151,7 @@ int main() {
       atender_siguiente(colaAlta, colaMedia, colaBaja, persona);
       break;
     case '5':
-      // Lógica para mostrar clientes por prioridad, mostrar la pila
+      // Lógica para mostrar clientes por prioridad, mostrar la cola
       //mostrar_clientes_por_prioridad(clientes);
       break;
     case '6':
