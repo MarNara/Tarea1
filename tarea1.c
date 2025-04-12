@@ -96,7 +96,7 @@ void mostrar_lista_clientes(Queue *colaAlta, Queue *colaMedia, Queue *colaBaja) 
   //hacer ciclos while para cada cola
   ticket *datosPersona;/*la usarepara asignar le un valor y luego para imprimir la prioridad.
   como todos los datos de la cola ya son tickets, no necesito castear*/
-  printf("Mostrar clientes por prioridad y orden de llegada");
+  printf("Mostrar clientes por prioridad y orden de llegada:\n\n");
   //sacar el primer elemento de la cola.
   datosPersona = queue_front(colaAlta);
   while(colaAlta != NULL){
