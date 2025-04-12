@@ -37,7 +37,8 @@ void registrar_clientes(List *clientes) {
   getchar();
   printf("Ingrese la descripción: ");
   fgets(persona->descripcion, 100, stdin);
-  persona->descripcion[strcspn(persona->descripcion, "\n")] = 0;;
+  persona->descripcion[strcspn(persona->descripcion, "\n")] = 0;
+  persona->prioridad = 3;
   list_pushBack(clientes, persona);
   printf("El cliente se a registrado con exito. \n");
 
@@ -78,10 +79,10 @@ void mostrar_lista_clientes(List *clientes) {
   // Aquí implementarías la lógica para recorrer y mostrar los pacientes
   for(int k = 0; k < total_clientes; k++){
     if(perso->prioridad == 1){
-      printf("ID: %d.\n Descripción: %s.\n Prioridad: Alta.\n", perso->id, perso->descripcion);
+      printf("ID: %d.\nDescripción: %s.\nPrioridad: Alta.\n", perso->id, perso->descripcion);
     }
     else if(perso->prioridad == 2){
-      printf("ID: %d.\n Descripción: %s.\n Prioridad: Media.\n", perso->id, perso->descripcion);
+      printf("ID: %d.\nDescripción: %s.\nPrioridad: Media.\n", perso->id, perso->descripcion);
     }
     else if(perso->prioridad == 3){
       printf("ID: %d.\nDescripción: %s\nPrioridad: Baja.\n", perso->id, perso->descripcion);
@@ -91,10 +92,19 @@ void mostrar_lista_clientes(List *clientes) {
 }
 
 void atender_siguiente(Queue *colaAlta, Queue *colaMedia, Queue *colaBaja, ticket *persona){
+  if(persona = queue_remove(colaAlta)){
+    printf("cliente de prioridad Alta siendo atendido\n");
+  }
+  else if(persona = queue_remove(colaMedia)){
+    printf("cliente de prioridad Media siendo atendido\n");
+  }
+  else if(persona = queue_remove(colaBaja)){
+    printf("cliente de prioridad Baja siendo atendido\n");
+  }
   
-
+    /* code */
 }
-
+  
 
 int main() {
   char opcion;
