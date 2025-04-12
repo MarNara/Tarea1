@@ -6,15 +6,9 @@
 
  //prueba
 
-typedef struct Node {
-  void *data;
-  struct Node *next;
-} Node;
-
 typedef struct{
-  char name[100];
-  int edad;
   int id;
+  char descripcion[100];
   int prioridad[3];
 }ticket;
 
@@ -37,11 +31,11 @@ void registrar_clientes(List *clientes) {
   printf("Registrar nuevo cliente\n");
   // Aquí implementarías la lógica para registrar un nuevo paciente
   ticket *persona = (ticket *)malloc(sizeof(ticket));
-  printf("Ingrese el nombre: ");
-  scanf("%s", persona->name);
+  printf("Ingrese el ID: ");
+  scanf("%d", &persona->id);
+  printf("Ingrese la descripción: ");
+  scanf("%s", persona->descripcion);
   getchar();
-  printf("Ingrese la edad: ");
-  scanf("%s", persona->edad);
   list_pushBack(clientes, persona);
   
 
@@ -50,14 +44,13 @@ void registrar_clientes(List *clientes) {
 void mostrar_lista_clientes(List *clientes) {
   // Mostrar pacientes en la cola de espera
   //ticket *persona = (ticket *)malloc(sizeof(ticket));
-  Node *nodoAux = clientes;
+  ticket *perso = (ticket*)list_first(clientes);
   int total_clientes = list_size(clientes);
   printf("clientes en espera: \n");
   // Aquí implementarías la lógica para recorrer y mostrar los pacientes
-  ticket *persona = (ticket *)nodoAux->data;
   for(int k = 0; k < total_clientes; k++){
-    printf("Nombre: %s, Edad: %d.", persona->name, persona->edad);
-    nodoAux = nodoAux->next;
+    printf("ID: %d, Descripción: %s, Prioridad: %d", perso->id, perso->descripcion, perso->prioridad);
+    perso = list_next(clientes);
   }
 }
 
@@ -77,7 +70,7 @@ int main() {
       break;
     case '2':
       // Lógica para asignar prioridad
-      /**/
+      /*usar una pila, asignar prioridad */
       break;
     case '3':
       mostrar_lista_clientes(clientes);
@@ -86,7 +79,7 @@ int main() {
       // Lógica para atender al siguiente cliente
       break;
     case '5':
-      // Lógica para mostrar clientes por prioridad
+      // Lógica para mostrar clientes por prioridad, mostrar la pila
       break;
     case '6':
       puts("Saliendo del sistema de gestión de Soporte Tecnico...");
