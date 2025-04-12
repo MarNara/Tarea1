@@ -37,7 +37,7 @@ void registrar_clientes(List *clientes) {
   getchar();
   printf("Ingrese la descripción: ");
   fgets(persona->descripcion, 100, stdin);
-  persona->descripcion[strcspn(persona->descripcion, "\n")];
+  persona->descripcion[strcspn(persona->descripcion, "\n")] = 0;;
   list_pushBack(clientes, persona);
   printf("El cliente se a registrado con exito. \n");
 
@@ -46,22 +46,22 @@ void registrar_clientes(List *clientes) {
 
 void asignar_Prioridad(Queue *colaAlta, Queue *colaMedia, Queue *colaBaja, ticket *persona){
 
-  printf("Asigne la prioridad: Alta es 1, Media es 2 y Baja es 3.");
+  printf("Asigne la prioridad: \n Alta es 1\n Media es 2\n Baja es 3. \n");
   //ingresar un dato a la cola
   scanf("%d", &persona->prioridad);
 
   switch (persona->prioridad) {
     case 1:
       queue_insert(colaAlta, persona);
-      printf("su prioridad a sido asignada como Alta");
+      printf("su prioridad a sido asignada como Alta\n");
       break;
     case 2:
       queue_insert(colaMedia, persona);
-      printf("su prioridad a sido asignada como Media");
+      printf("su prioridad a sido asignada como Media\n");
       break;
     case 3:
       queue_insert(colaBaja, persona);
-      printf("su prioridad a sido asignada como Media");
+      printf("su prioridad a sido asignada como Baja\n");
       break;
     default:
       printf("Opción invalida %d", persona->prioridad);
@@ -77,11 +77,23 @@ void mostrar_lista_clientes(List *clientes) {
   printf("clientes en espera: \n");
   // Aquí implementarías la lógica para recorrer y mostrar los pacientes
   for(int k = 0; k < total_clientes; k++){
-    printf("ID: %d, Descripción: %s, Prioridad: %d", perso->id, perso->descripcion, perso->prioridad);
+    if(perso->prioridad == 1){
+      printf("ID: %d.\n Descripción: %s.\n Prioridad: Alta.\n", perso->id, perso->descripcion);
+    }
+    else if(perso->prioridad == 2){
+      printf("ID: %d.\n Descripción: %s.\n Prioridad: Media.\n", perso->id, perso->descripcion);
+    }
+    else if(perso->prioridad == 3){
+      printf("ID: %d.\nDescripción: %s\nPrioridad: Baja.\n", perso->id, perso->descripcion);
+    }
     perso = list_next(clientes);
   }
 }
 
+void atender_siguiente(Queue *colaAlta, Queue *colaMedia, Queue *colaBaja, ticket *persona){
+  
+
+}
 
 
 int main() {
@@ -122,10 +134,12 @@ int main() {
       mostrar_lista_clientes(clientes);
       break;
     case '4':
-      // Lógica para atender al siguiente cliente
+      // Lógica para atender al siguiente cliente, con un if y funciones de colas, primero ver si sirve el remove.
+      atender_siguiente(colaAlta, colaMedia, colaBaja, persona);
       break;
     case '5':
       // Lógica para mostrar clientes por prioridad, mostrar la pila
+      //mostrar_clientes_por_prioridad(clientes);
       break;
     case '6':
       puts("Saliendo del sistema de gestión de Soporte Tecnico...");
