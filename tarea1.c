@@ -1,4 +1,5 @@
 #include "tdas/list.h"
+#include "tdas/quque.h"
 #include "tdas/extra.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,7 +10,7 @@
 typedef struct{
   int id;
   char descripcion[100];
-  int prioridad[3];
+  int prioridad;
 }ticket;
 
 // Menú principal
@@ -41,6 +42,25 @@ void registrar_clientes(List *clientes) {
 
 }
 
+void asignar_Prioridad(Queue *colaAlta, Queue *colaMedia, Queue *colaBaja, ticket *persona){
+  switch (persona->prioridad) {
+    case 1:
+      //ingresar un dato a la cola
+      queue_insert(colaAlta, persona);
+      break;
+    case 2:
+      queue_insert(colaMedia, persona);
+      break;
+    case 3: 
+      queue_insert(colaBaja, persona);
+      break;
+    default:
+      printf("Opción invalida");
+      break;
+
+  }
+}
+
 void mostrar_lista_clientes(List *clientes) {
   // Mostrar pacientes en la cola de espera
   //ticket *persona = (ticket *)malloc(sizeof(ticket));
@@ -53,6 +73,8 @@ void mostrar_lista_clientes(List *clientes) {
     perso = list_next(clientes);
   }
 }
+
+
 
 int main() {
   char opcion;
@@ -73,14 +95,14 @@ int main() {
       /*usar 3 colas, asignar prioridad, 1 ALto, 2: Medio, 3 Bajo.
       Hacer una funcion, ya que hacer el codigo aqui es mucho enredo y el main no se ve limpio */
 
-      //ticket* persona = (ticket*)list_first(clientes);
+      ticket* persona = (ticket*)list_first(clientes);
 
       //printf("Asigne la prioridad: %d", persona->prioridad);
       
-      List* colaAlta = queue_create(clientes);
-      List* colaMedia = queue_create(clientes);
-      List* colaBaja = queue_create(clientes);
-      asignar_Prioridad(colaAlta, colaMedia, colaBaja, clientes);
+      Queue* colaAlta = queue_create(colaAlta);
+      Queue* colaMedia = queue_create(colaMedia);
+      Queue* colaBaja = queue_create(colaBaja);
+      asignar_Prioridad(colaAlta, colaMedia, colaBaja, persona);
       
       break;
     case '3':
