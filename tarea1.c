@@ -70,7 +70,13 @@ int main() {
       break;
     case '2':
       // Lógica para asignar prioridad
-      /*usar una pila, asignar prioridad */
+      /*usar 3 colas, asignar prioridad, 1 ALto, 2: Medio, 3 Bajo */
+
+      printf("Asigne la prioridad: %d", clientes);
+      List* colaAlta = queue_create(clientes);
+      List* colaMedia = queue_create(clientes);
+      List* colaBaja = queue_create(clientes);
+      
       break;
     case '3':
       mostrar_lista_clientes(clientes);
