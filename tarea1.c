@@ -94,13 +94,26 @@ void asignar_Prioridad(Queue *colaAlta, Queue *colaMedia, Queue *colaBaja, List 
 void mostrar_lista_clientes(Queue *colaAlta, Queue *colaMedia, Queue *colaBaja) {
   // Mostrar pacientes en la cola de espera
   //hacer ciclos while para cada cola
-  ticket *persona;/*la usarepara asignar le un valor y luego para imprimir la prioridad.
+  ticket *datosPersona;/*la usarepara asignar le un valor y luego para imprimir la prioridad.
   como todos los datos de la cola ya son tickets, no necesito castear*/
   printf("Mostrar clientes por prioridad y orden de llegada");
   //sacar el primer elemento de la cola.
-  persona = queue_front(colaAlta);
+  datosPersona = queue_front(colaAlta);
   while(colaAlta != NULL){
-    
+    printf("ID: %d.\nDescripción: %s.\nPrioridad: Alta.\n\n", datosPersona->id, datosPersona->descripcion);
+    datosPersona = list_next(colaAlta);//no se si funciona pero espermos que si ya que esta ligado a list.
+  }
+
+  datosPersona = queue_front(colaMedia);
+  while(colaAlta != NULL){
+    printf("ID: %d.\nDescripción: %s.\nPrioridad: Media.\n\n", datosPersona->id, datosPersona->descripcion);
+    datosPersona = list_next(colaMedia);
+  }
+
+  datosPersona = queue_front(colaBaja);
+  while(colaAlta != NULL){
+    printf("ID: %d.\nDescripción: %s.\nPrioridad: Media.\n\n", datosPersona->id, datosPersona->descripcion);
+    datosPersona = list_next(colaBaja);
   }
 
 }
