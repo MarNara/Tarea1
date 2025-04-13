@@ -1,6 +1,7 @@
 #include "tdas/list.h"
 #include "tdas/quque.h"
 #include "tdas/extra.h"
+#include "time.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -28,7 +29,7 @@ void mostrarMenuPrincipal() {
   puts("6) Salir");
 }
 
-void registrar_clientes(List *clientes) {
+void registrar_clientes(List *clientes, Queue *colaBaja) {
   printf("Registrar nuevo cliente\n");
   // Aquí implementarías la lógica para registrar un nuevo paciente
   ticket *persona = (ticket *)malloc(sizeof(ticket));
@@ -39,15 +40,37 @@ void registrar_clientes(List *clientes) {
   fgets(persona->descripcion, 100, stdin);
   persona->descripcion[strcspn(persona->descripcion, "\n")] = 0;
   //prioridad por defecto.
+  //scanf("%d", &persona->prioridad);
   persona->prioridad = 3;
   list_pushBack(clientes, persona);
+  queue_insert(colaBaja, persona);
   printf("El cliente se a registrado con exito. \n");
 
 }
 
 
+//crear una lista auxiliar.
+void eliminarDeCola(Queue *cola, ticket *persona) {
+  int tamano = list_size(cola);
+  //crear una cola temporal 
+  Queue *temporal = list_create();
+
+  for (int k = 0; k < tamano; k++) {
+    ticket *actual = queue_remove(cola);
+    if (actual != persona) queue_insert(temporal, actual);
+  }
+
+  // Copiar de nuevo a la cola original
+  while (list_size(temporal) > 0) {
+    queue_insert(cola, queue_remove(temporal));
+  }
+
+  free(temporal); // eliminar la lista temporal
+}
+
 void asignar_Prioridad(Queue *colaAlta, Queue *colaMedia, Queue *colaBaja, List *clientes){
   
+
   int buscar;
   printf("Ingrese el ID: ");
   scanf("%d", &buscar);
@@ -61,16 +84,19 @@ void asignar_Prioridad(Queue *colaAlta, Queue *colaMedia, Queue *colaBaja, List 
       scanf("%d", &persona->prioridad);
       switch (persona->prioridad) {
         case 1:
+          eliminarDeCola(colaBaja, persona);
           queue_insert(colaAlta, persona);
           printf("su prioridad a sido asignada como Alta\n");
           //persona = list_next(clientes);
           break;
         case 2:
+          eliminarDeCola(colaBaja, persona);
           queue_insert(colaMedia, persona);
           printf("su prioridad a sido asignada como Media\n");
           //persona = list_next(clientes);
           break;
         case 3:
+          eliminarDeCola(colaBaja, persona);
           queue_insert(colaBaja, persona);
           printf("su prioridad a sido asignada como Baja\n");
           //persona = list_next(clientes);
@@ -99,20 +125,21 @@ void mostrar_lista_clientes(Queue *colaAlta, Queue *colaMedia, Queue *colaBaja) 
   printf("Mostrar clientes por prioridad y orden de llegada:\n\n");
   //sacar el primer elemento de la cola.
   datosPersona = queue_front(colaAlta);
-  while(colaAlta != NULL){
+  //preguntar si la cola llega a null.
+  while(datosPersona != NULL){
     printf("ID: %d.\nDescripción: %s.\nPrioridad: Alta.\n\n", datosPersona->id, datosPersona->descripcion);
     datosPersona = list_next(colaAlta);//no se si funciona pero espermos que si ya que esta ligado a list.
   }
 
   datosPersona = queue_front(colaMedia);
-  while(colaAlta != NULL){
+  while(datosPersona != NULL){
     printf("ID: %d.\nDescripción: %s.\nPrioridad: Media.\n\n", datosPersona->id, datosPersona->descripcion);
     datosPersona = list_next(colaMedia);
   }
 
   datosPersona = queue_front(colaBaja);
-  while(colaAlta != NULL){
-    printf("ID: %d.\nDescripción: %s.\nPrioridad: Media.\n\n", datosPersona->id, datosPersona->descripcion);
+  while(datosPersona != NULL){
+    printf("ID: %d.\nDescripción: %s.\nPrioridad: Baja.\n\n", datosPersona->id, datosPersona->descripcion);
     datosPersona = list_next(colaBaja);
   }
 
@@ -191,7 +218,7 @@ int main() {
       
     switch (opcion) {
     case '1':
-      registrar_clientes(clientes);
+      registrar_clientes(clientes, colaBaja);
       break;
     case '2':
       // Lógica para asignar prioridad
