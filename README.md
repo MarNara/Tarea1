@@ -1,25 +1,37 @@
 # Tarea1
 
-Información que existirá dentro del README.md
-1.	cómo compilar y ejecutar la tarea;
+# Sistema de gestión de tickets de soporte técnico:
+Descripción: En este sistema de gestión de tickets de soporte tecnico se pueden registrar tickets, asignar 
+prioridad, mostrar los tickets, atender al siguiente ticket y buscar tickets por Id, ya que esto permite 
+tener una mayor organizacion para los distintos casos.
 
-primero en el git bash compilar: 
-gcc tdas/*.c tarea1.c -Wno-unused-result -o tarea1
+1.	cómo compilar y ejecutar la tarea:
 
-Luego debe escribir lo siguiente para ejecutar la tarea: 
-./tarea1
+-Ingresar al visual studio code.
+-Clonar en repositorio GitHub el link enviado al aula virtual:
+
+-----------Para compilar y ejecutar el codigo--------------
+- Abre el archivo principal (por ejemplo, `tarea1.c`).
+- Abre la terminal con ctrl + ñ.
+- En la terminal bash, compila el programa con el siguiente comando :
+    gcc tdas/*.c tarea1.c -Wno-unused-result -o tarea1
+
+- Luego debe escribir lo siguiente para ejecutar la tarea: 
+    ./tarea1
 
 2.	las opciones que funcionan correctamente y las que no lo hacen indicando posibles causas;
 Las opiones que funcionan son las siguientes: 
-(1) Registrar cliente.
-(2) Asignar prioridad a cliente.
-(3) Mostrar lista de espera.
-(4) Atender al siguiente cliente.
+(1) Registrar ticket.
+(2) Asignar prioridad a ticket.
+(3) Mostrar lista de tickets pendientes.
+(4) Procesar siguiente ticket.
 (5) Buscar ticket por ID y mostrar detalles.
 (6) Salir.
 
-Las funciones que funcionan correctamente son todas las de lista.h y la lista quque.h
-Y las de la cola.
+------OBSERVACIÓN-----
+Al pasar a otra opcion debo presionar una tecla cualquiera pero no me deja usar enter, sin embargo, en
+otros casos me deja presionar enter sin problemas.
+
 
 3.	un ejemplo mostrando como interactuar con la aplicación.
 
