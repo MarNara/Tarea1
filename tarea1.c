@@ -11,7 +11,7 @@
 
 typedef struct{
   int id;
-  char descripcion[100];
+  char descripcion[1000];
   int prioridad;
   char hora[25];
 }ticket;
@@ -20,20 +20,20 @@ typedef struct{
 void mostrarMenuPrincipal() {
   limpiarPantalla();
   puts("========================================");
-  puts("     Sistema de Gestión de Soporte Tecnico");
+  puts("     Sistema de gestión de tickets de soporte técnico");
   puts("========================================");
 
-  puts("1) Registrar cliente");
-  puts("2) Asignar prioridad a cliente");
-  puts("3) Mostrar lista de espera");
-  puts("4) Atender al siguiente cliente");
+  puts("1) Registrar ticket");
+  puts("2) Asignar prioridad a ticket ");
+  puts("3) Mostrar lista de tickets pendientes");
+  puts("4) Procesar siguiente ticket ");
   puts("5) Buscar ticket por ID y mostrar detalles");
   puts("6) Salir");
 }
 
 void registrar_clientes(List *clientes, Queue *colaBaja) {
   
-  printf("Registrar nuevo cliente\n");
+  printf("Registrar nuevo ticket\n");
   // Aquí implementarías la lógica para registrar un nuevo paciente
   ticket *persona = (ticket *)malloc(sizeof(ticket));
   
@@ -51,28 +51,34 @@ void registrar_clientes(List *clientes, Queue *colaBaja) {
   time_t horaDe_ahora = time(NULL);
   struct tm *tiempo_actual = localtime(&horaDe_ahora);
   strftime(persona->hora, 25, "%H:%M:%S", tiempo_actual);
-  printf("El cliente se a registrado con exito. \n");
+  printf("El ticket se a registrado con exito. \n");
 
 }
 
 
-//crear una lista auxiliar.
+/*crear una funcion que elimine el ticket de una cola y solo guarde los que no quiero modificar*/
 void eliminarDeCola(Queue *cola, ticket *persona) {
-  int tamano = list_size(cola);
-  //crear una cola temporal usando la list, ya que la cola estaba definida con eso.
-  Queue *temporal = list_create();
+  int total_de_la_cola = list_size(cola);
+  /*crear una cola temporal o auxiliar para ver si el ticket 
+  actual es diferenete a los datos del cliente*/
+  Queue *cola_temporal = list_create();
 
-  for (int k = 0; k < tamano; k++) {
-    ticket *actual = queue_remove(cola);
-    if (actual != persona) queue_insert(temporal, actual);
+  /*1ro necesito algo que elimine y devuelva el elemento de la cola original ya que ese 
+  elemento lo voy a eliminar, luego insertar los elementos que no sean el 
+  ticket actual a la cola temporal
+  */
+  for (int k = 0; k < total_de_la_cola; k++) {
+    ticket *ticket_actual = queue_remove(cola);
+    if (ticket_actual != persona) queue_insert(cola_temporal, ticket_actual);
   }
 
-  // Copiar de nuevo a la cola original
-  while (list_size(temporal) > 0) {
-    queue_insert(cola, queue_remove(temporal));
+  /*insertar los datos de la cola temporal a la cola original para liberar la cola temporal
+  y mantener los datos que no necesito eliminar en la original*/
+  while (list_size(cola_temporal) > 0) {
+    queue_insert(cola, queue_remove(cola_temporal));
   }
 
-  free(temporal); // eliminar la lista temporal
+  free(cola_temporal); // liberar memoria de la lista temporal
 }
 
 void asignar_Prioridad(Queue *colaAlta, Queue *colaMedia, Queue *colaBaja, List *clientes){
@@ -94,19 +100,16 @@ void asignar_Prioridad(Queue *colaAlta, Queue *colaMedia, Queue *colaBaja, List 
           eliminarDeCola(colaBaja, persona);
           queue_insert(colaAlta, persona);
           printf("su prioridad a sido asignada como Alta\n");
-          //persona = list_next(clientes);
           break;
         case 2:
           eliminarDeCola(colaBaja, persona);
           queue_insert(colaMedia, persona);
           printf("su prioridad a sido asignada como Media\n");
-          //persona = list_next(clientes);
           break;
         case 3:
           eliminarDeCola(colaBaja, persona);
           queue_insert(colaBaja, persona);
           printf("su prioridad a sido asignada como Baja\n");
-          //persona = list_next(clientes);
           break;
         default:
           printf("Opción invalida %d", persona->prioridad);
@@ -129,7 +132,7 @@ void mostrar_lista_clientes(Queue *colaAlta, Queue *colaMedia, Queue *colaBaja) 
   //hacer ciclos while para cada cola
   ticket *datosPersona;/*la usarepara asignar le un valor y luego para imprimir la prioridad.
   como todos los datos de la cola ya son tickets, no necesito castear*/
-  printf("Mostrar clientes por prioridad y orden de llegada:\n\n");
+  printf("Mostrar ticket por prioridad y orden de llegada:\n\n");
   //sacar el primer elemento de la cola.
   datosPersona = queue_front(colaAlta);
   //preguntar si la cola llega a null.
@@ -158,25 +161,25 @@ void mostrar_lista_clientes(Queue *colaAlta, Queue *colaMedia, Queue *colaBaja) 
 void procesar_siguiente_ticket(Queue *colaAlta, Queue *colaMedia, Queue *colaBaja, List *clientes){
   ticket *persona = (ticket*)list_first(clientes);
   if(persona = queue_remove(colaAlta)){
-    printf("cliente de prioridad Alta siendo atendido\n");
+    printf("Ticket de prioridad Alta siendo atendido\n");
     printf("ID: %d.\nDescripción: %s.\nPrioridad: Alta.\n", persona->id, persona->descripcion);
     printf("Hora de Registro: %s\n\n", persona->hora);
     persona = list_next(clientes);
   }
   else if(persona = queue_remove(colaMedia)){
-    printf("cliente de prioridad Media siendo atendido\n");
+    printf("Ticket de prioridad Media siendo atendido\n");
     printf("ID: %d.\nDescripción: %s.\nPrioridad: Media.\n", persona->id, persona->descripcion);
     printf("Hora de Registro: %s\n\n", persona->hora);
     persona = list_next(clientes);
   }
   else if(persona = queue_remove(colaBaja)){
-    printf("cliente de prioridad Baja siendo atendido\n");
+    printf("Ticket de prioridad Baja siendo atendido\n");
     printf("ID: %d.\nDescripción: %s.\nPrioridad: Baja.\n", persona->id, persona->descripcion);
     printf("Hora de Registro: %s\n\n", persona->hora);
     persona = list_next(clientes);
   }
   else{
-    printf("No quedan mas clientes por atender\n");
+    printf("No quedan más tickets por atender\n");
   }
   //mostrar al cliente que estan atendiendo o procesando
     /* code */
