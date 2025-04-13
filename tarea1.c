@@ -27,7 +27,7 @@ void mostrarMenuPrincipal() {
   puts("2) Asignar prioridad a cliente");
   puts("3) Mostrar lista de espera");
   puts("4) Atender al siguiente cliente");
-  puts("5) Mostrar clientes por prioridad");
+  puts("5) Buscar ticket por ID y mostrar detalles");
   puts("6) Salir");
 }
 
@@ -115,7 +115,7 @@ void asignar_Prioridad(Queue *colaAlta, Queue *colaMedia, Queue *colaBaja, List 
       
     }
     else{
-      printf("El ID no a sido encontrado");
+      printf("El ID no a sido encontrado\n");
     }
     persona = list_next(clientes);
   }
@@ -176,7 +176,7 @@ void procesar_siguiente_ticket(Queue *colaAlta, Queue *colaMedia, Queue *colaBaj
     persona = list_next(clientes);
   }
   else{
-    printf("No quedan mas clientes por atender");
+    printf("No quedan mas clientes por atender\n");
   }
   //mostrar al cliente que estan atendiendo o procesando
     /* code */
