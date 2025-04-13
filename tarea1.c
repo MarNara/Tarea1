@@ -81,8 +81,8 @@ void eliminarDeCola(Queue *cola, ticket *persona) {
   free(cola_temporal); // liberar memoria de la lista temporal
 }
 
+
 void asignar_Prioridad(Queue *colaAlta, Queue *colaMedia, Queue *colaBaja, List *clientes){
-  
 
   int buscar;
   printf("Ingrese el ID al cual quiere asignar una nueva prioridad: ");
@@ -90,9 +90,12 @@ void asignar_Prioridad(Queue *colaAlta, Queue *colaMedia, Queue *colaBaja, List 
 
   int tamano = list_size(clientes);
   ticket *persona = (ticket *)list_first(clientes);
-
+  
+  bool encontrado = false;
+  
   for(int k = 0; k < tamano; k++){
     if(persona->id == buscar){
+      encontrado = true;
       printf("Asigne la prioridad: \n Alta es 1\n Media es 2\n Baja es 3. \n");
       scanf("%d", &persona->prioridad);
       switch (persona->prioridad) {
@@ -117,13 +120,12 @@ void asignar_Prioridad(Queue *colaAlta, Queue *colaMedia, Queue *colaBaja, List 
       }
       
     }
-    else{
-      printf("El ID no a sido encontrado\n");
-    }
+    
     persona = list_next(clientes);
   }
-  //list_pushBack(clientes, persona);
-
+  if(!encontrado){
+    printf("El ID que a ingresado no existe\n");
+  }
 }
   
 
@@ -205,7 +207,6 @@ void mostrar_clientes_por_busqueda(List *clientes){
     }
     persona = list_next(clientes);
   }
-  //si no se encuentra enviar este mensaje
   if(El_Id_esta == false){
     printf("El ID que a ingresado no existe\n");
   }

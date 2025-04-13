@@ -22,4 +22,24 @@ Las funciones que funcionan correctamente son todas las de lista.h y la lista qu
 Y las de la cola.
 
 3.	un ejemplo mostrando como interactuar con la aplicación.
-Colocar el Id del paciente: habian
+Colocar el Id del paciente:
+
+EJEMPLO opcion 1:
+Ingrese su opci├│n: 1
+Registrar nuevo ticket
+Ingrese el ID: 23
+Ingrese la descripci├│n: instalar un antivirus
+El ticket se a registrado con exito. 
+Presione una tecla para continuar...
+
+Ingrese su opci├│n: 1
+Registrar nuevo ticket
+Ingrese el ID: 45
+Ingrese la descripci├│n: El Pc se apago y ya no enciende
+El ticket se a registrado con exito. 
+Presione una tecla para continuar...
+
+EJEMPLO opción 2:
+
+
+
