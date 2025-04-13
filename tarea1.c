@@ -1,10 +1,11 @@
 #include "tdas/list.h"
 #include "tdas/quque.h"
 #include "tdas/extra.h"
-#include "time.h"
+#include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
  //prueba
 
@@ -12,6 +13,7 @@ typedef struct{
   int id;
   char descripcion[100];
   int prioridad;
+  char hora[25];
 }ticket;
 
 // Menú principal
@@ -30,9 +32,11 @@ void mostrarMenuPrincipal() {
 }
 
 void registrar_clientes(List *clientes, Queue *colaBaja) {
+  
   printf("Registrar nuevo cliente\n");
   // Aquí implementarías la lógica para registrar un nuevo paciente
   ticket *persona = (ticket *)malloc(sizeof(ticket));
+  
   printf("Ingrese el ID: ");
   scanf("%d", &persona->id);
   getchar();
@@ -44,6 +48,9 @@ void registrar_clientes(List *clientes, Queue *colaBaja) {
   persona->prioridad = 3;
   list_pushBack(clientes, persona);
   queue_insert(colaBaja, persona);
+  time_t horaDe_ahora = time(NULL);
+  struct tm *tiempo_actual = localtime(&horaDe_ahora);
+  strftime(persona->hora, 25, "%H:%M:%S", tiempo_actual);
   printf("El cliente se a registrado con exito. \n");
 
 }
@@ -52,7 +59,7 @@ void registrar_clientes(List *clientes, Queue *colaBaja) {
 //crear una lista auxiliar.
 void eliminarDeCola(Queue *cola, ticket *persona) {
   int tamano = list_size(cola);
-  //crear una cola temporal 
+  //crear una cola temporal usando la list, ya que la cola estaba definida con eso.
   Queue *temporal = list_create();
 
   for (int k = 0; k < tamano; k++) {
@@ -72,7 +79,7 @@ void asignar_Prioridad(Queue *colaAlta, Queue *colaMedia, Queue *colaBaja, List 
   
 
   int buscar;
-  printf("Ingrese el ID: ");
+  printf("Ingrese el ID al cual quiere asignar una nueva prioridad: ");
   scanf("%d", &buscar);
 
   int tamano = list_size(clientes);
@@ -127,19 +134,22 @@ void mostrar_lista_clientes(Queue *colaAlta, Queue *colaMedia, Queue *colaBaja) 
   datosPersona = queue_front(colaAlta);
   //preguntar si la cola llega a null.
   while(datosPersona != NULL){
-    printf("ID: %d.\nDescripción: %s.\nPrioridad: Alta.\n\n", datosPersona->id, datosPersona->descripcion);
+    printf("ID: %d.\nDescripción: %s.\nPrioridad: Alta.\n", datosPersona->id, datosPersona->descripcion);
+    printf("Hora de Registro: %s\n\n", datosPersona->hora);
     datosPersona = list_next(colaAlta);//no se si funciona pero espermos que si ya que esta ligado a list.
   }
 
   datosPersona = queue_front(colaMedia);
   while(datosPersona != NULL){
-    printf("ID: %d.\nDescripción: %s.\nPrioridad: Media.\n\n", datosPersona->id, datosPersona->descripcion);
+    printf("ID: %d.\nDescripción: %s.\nPrioridad: Media.\n", datosPersona->id, datosPersona->descripcion);
+    printf("Hora de Registro: %s\n\n", datosPersona->hora);
     datosPersona = list_next(colaMedia);
   }
 
   datosPersona = queue_front(colaBaja);
   while(datosPersona != NULL){
-    printf("ID: %d.\nDescripción: %s.\nPrioridad: Baja.\n\n", datosPersona->id, datosPersona->descripcion);
+    printf("ID: %d.\nDescripción: %s.\nPrioridad: Baja.\n", datosPersona->id, datosPersona->descripcion);
+    printf("Hora de Registro: %s\n\n", datosPersona->hora);
     datosPersona = list_next(colaBaja);
   }
 
@@ -149,49 +159,76 @@ void procesar_siguiente_ticket(Queue *colaAlta, Queue *colaMedia, Queue *colaBaj
   ticket *persona = (ticket*)list_first(clientes);
   if(persona = queue_remove(colaAlta)){
     printf("cliente de prioridad Alta siendo atendido\n");
+    printf("ID: %d.\nDescripción: %s.\nPrioridad: Alta.\n", persona->id, persona->descripcion);
+    printf("Hora de Registro: %s\n\n", persona->hora);
     persona = list_next(clientes);
   }
   else if(persona = queue_remove(colaMedia)){
     printf("cliente de prioridad Media siendo atendido\n");
+    printf("ID: %d.\nDescripción: %s.\nPrioridad: Media.\n", persona->id, persona->descripcion);
+    printf("Hora de Registro: %s\n\n", persona->hora);
     persona = list_next(clientes);
   }
   else if(persona = queue_remove(colaBaja)){
     printf("cliente de prioridad Baja siendo atendido\n");
+    printf("ID: %d.\nDescripción: %s.\nPrioridad: Baja.\n", persona->id, persona->descripcion);
+    printf("Hora de Registro: %s\n\n", persona->hora);
     persona = list_next(clientes);
   }
-  //persona = list_next(clientes);
+  else{
+    printf("No quedan mas clientes por atender");
+  }
+  //mostrar al cliente que estan atendiendo o procesando
     /* code */
+  
 }
   
 void mostrar_clientes_por_busqueda(List *clientes){
-  // Mostrar pacientes en la cola de espera
-  //ticket *persona = (ticket *)malloc(sizeof(ticket));
-  ticket *perso = (ticket*)list_first(clientes);
-  int total_clientes = list_size(clientes);
-  printf("clientes en espera: \n");
+  // Mostrar cliente que se busca
+  //usar el buscador de la prioridad que se queria cambiar
   int buscar;
-  printf("Ingrese el ID: ");
+  printf("Ingrese el ID que desea buscar: ");
   scanf("%d", &buscar);
 
+  //no puedo eliminar las cantidades de veces que aparece un dato lo hare con un bool
   int tamano = list_size(clientes);
   ticket *persona = (ticket *)list_first(clientes);
+  //no puedo eliminar las cantidades de veces que aparece un dato lo hare con un bool
+  bool El_Id_esta = false;
+  for(int k = 0; k < tamano; k++){
+    if(persona->id == buscar){
+      El_Id_esta = true;
+      break;
+    }
+    persona = list_next(clientes);
+  }
+  //si no se encuentra enviar este mensaje
+  if(El_Id_esta == false){
+    printf("El ID que a ingresado no existe\n");
+  }
 
-  // Aquí implementarías la lógica para recorrer y mostrar los pacientes
-  for(int k = 0; k < total_clientes; k++){
+  persona = (ticket *)list_first(clientes);
+  for(int k = 0; k < tamano; k++){
     if(persona->id == buscar){
       if(persona->prioridad == 1){
-        printf("ID: %d.\nDescripción: %s.\nPrioridad: Alta.\n\n", perso->id, perso->descripcion);
+        printf("ID: %d.\nDescripción: %s.\nPrioridad: Alta.\n", persona->id, persona->descripcion);
+        printf("Hora de Registro: %s\n\n", persona->hora);
+
       }
-      else if(perso->prioridad == 2){
-        printf("ID: %d.\nDescripción: %s.\nPrioridad: Media.\n\n", perso->id, perso->descripcion);
+      else if(persona->prioridad == 2){
+        printf("ID: %d.\nDescripción: %s.\nPrioridad: Media.\n", persona->id, persona->descripcion);
+        printf("Hora de Registro: %s\n\n", persona->hora);
       }
-      else if(perso->prioridad == 3){
-        printf("ID: %d.\nDescripción: %s\nPrioridad: Baja.\n\n", perso->id, perso->descripcion);
+      else if(persona->prioridad == 3){
+        printf("ID: %d.\nDescripción: %s.\nPrioridad: Baja.\n", persona->id, persona->descripcion);
+        printf("Hora de Registro: %s\n\n", persona->hora);
       }
-      perso = list_next(clientes);
+      
     }
-    
+    persona = list_next(clientes);
   }
+  
+  
 }
 
 int main() {
