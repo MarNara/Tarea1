@@ -34,7 +34,7 @@ void mostrarMenuPrincipal() {
 void registrar_clientes(List *clientes, Queue *colaBaja) {
   
   printf("Registrar nuevo ticket\n");
-  // Aquí implementarías la lógica para registrar un nuevo paciente
+  //guardamos memoria para cada persona que registrará su ticket
   ticket *persona = (ticket *)malloc(sizeof(ticket));
   
   printf("Ingrese el ID: ");
@@ -44,9 +44,9 @@ void registrar_clientes(List *clientes, Queue *colaBaja) {
   fgets(persona->descripcion, 100, stdin);
   persona->descripcion[strcspn(persona->descripcion, "\n")] = 0;
   //prioridad por defecto.
-  //scanf("%d", &persona->prioridad);
   persona->prioridad = 3;
   list_pushBack(clientes, persona);
+  //insertar prioridad a la cola
   queue_insert(colaBaja, persona);
   time_t horaDe_ahora = time(NULL);
   struct tm *tiempo_actual = localtime(&horaDe_ahora);
@@ -90,7 +90,7 @@ void asignar_Prioridad(Queue *colaAlta, Queue *colaMedia, Queue *colaBaja, List 
 
   int tamano = list_size(clientes);
   ticket *persona = (ticket *)list_first(clientes);
-  
+  //crear una variable booleana para evaluar los diferentes casos (si hay o no tickets)
   bool encontrado = false;
   
   for(int k = 0; k < tamano; k++){
@@ -120,7 +120,7 @@ void asignar_Prioridad(Queue *colaAlta, Queue *colaMedia, Queue *colaBaja, List 
       }
       
     }
-    
+    //pasar al siguiente cliente 
     persona = list_next(clientes);
   }
   if(!encontrado){
@@ -133,15 +133,15 @@ void mostrar_lista_clientes(Queue *colaAlta, Queue *colaMedia, Queue *colaBaja) 
   // Mostrar pacientes en la cola de espera
   //hacer ciclos while para cada cola
   ticket *datosPersona;/*la usarepara asignar le un valor y luego para imprimir la prioridad.
-  como todos los datos de la cola ya son tickets, no necesito castear*/
+  Como todos los datos de la cola ya son tickets, no necesito castear*/
   printf("Mostrar ticket por prioridad y orden de llegada:\n\n");
   //sacar el primer elemento de la cola.
   datosPersona = queue_front(colaAlta);
-  //preguntar si la cola llega a null.
+  //si la cola llega a null frenar el ciclo.
   while(datosPersona != NULL){
     printf("ID: %d.\nDescripción: %s.\nPrioridad: Alta.\n", datosPersona->id, datosPersona->descripcion);
     printf("Hora de Registro: %s\n\n", datosPersona->hora);
-    datosPersona = list_next(colaAlta);//no se si funciona pero espermos que si ya que esta ligado a list.
+    datosPersona = list_next(colaAlta);//usaremos un list_next en una cola ya que la cola fue echa con List .
   }
 
   datosPersona = queue_front(colaMedia);
@@ -162,11 +162,15 @@ void mostrar_lista_clientes(Queue *colaAlta, Queue *colaMedia, Queue *colaBaja) 
 
 void procesar_siguiente_ticket(Queue *colaAlta, Queue *colaMedia, Queue *colaBaja, List *clientes){
   ticket *persona = (ticket*)list_first(clientes);
+  //obtener los datos de un ticket
+  //utilizar if para que vaya por orden
+  //en cada if mostrar al cliente que se este procesando (o el ticket del cliente)
   if(persona = queue_remove(colaAlta)){
     printf("Ticket de prioridad Alta siendo atendido\n");
     printf("ID: %d.\nDescripción: %s.\nPrioridad: Alta.\n", persona->id, persona->descripcion);
     printf("Hora de Registro: %s\n\n", persona->hora);
-    persona = list_next(clientes);
+    persona = list_next(clientes);/*pasamos al siguiente ticket dentro de su cola y el remove se encargara 
+    de eliminar al actual*/
   }
   else if(persona = queue_remove(colaMedia)){
     printf("Ticket de prioridad Media siendo atendido\n");
@@ -183,22 +187,22 @@ void procesar_siguiente_ticket(Queue *colaAlta, Queue *colaMedia, Queue *colaBaj
   else{
     printf("No quedan más tickets por atender\n");
   }
-  //mostrar al cliente que estan atendiendo o procesando
-    /* code */
+  
   
 }
-  
+
+
+// Mostrar ticket que se busca  
 void mostrar_clientes_por_busqueda(List *clientes){
-  // Mostrar cliente que se busca
-  //usar el buscador de la prioridad que se queria cambiar
+  //ingresar ticket que se busca
   int buscar;
   printf("Ingrese el ID que desea buscar: ");
   scanf("%d", &buscar);
 
-  //no puedo eliminar las cantidades de veces que aparece un dato lo hare con un bool
+  
   int tamano = list_size(clientes);
   ticket *persona = (ticket *)list_first(clientes);
-  //no puedo eliminar las cantidades de veces que aparece un dato lo hare con un bool
+  //usar un ciclo con bool para evaluar casoso donde exista o no el ticket
   bool El_Id_esta = false;
   for(int k = 0; k < tamano; k++){
     if(persona->id == buscar){
@@ -211,7 +215,9 @@ void mostrar_clientes_por_busqueda(List *clientes){
     printf("El ID que a ingresado no existe\n");
   }
 
+  //asignar otra vez el valor de persona para evaluar en el segundo for, ya que el frena el ciclo con ese dato
   persona = (ticket *)list_first(clientes);
+  //crear un for para mostrar el ticket si se encontró en la lista
   for(int k = 0; k < tamano; k++){
     if(persona->id == buscar){
       if(persona->prioridad == 1){
@@ -238,7 +244,7 @@ void mostrar_clientes_por_busqueda(List *clientes){
 int main() {
   char opcion;
   List *clientes = list_create(); // puedes usar una lista para gestionar los pacientes, general
-  //CREAR COLAS
+  //CREAR COLAS PARA GUARDAR PRIORIDAD
   Queue *colaAlta = NULL;
   colaAlta = queue_create(colaAlta);
  
@@ -273,7 +279,6 @@ int main() {
       break;
     case '4':
       // Lógica para atender al siguiente cliente, con un if y funciones de colas, primero ver si sirve el remove.
-      //persona = (ticket*)list_first(clientes);
       procesar_siguiente_ticket(colaAlta, colaMedia, colaBaja, clientes);
       break;
     case '5':
