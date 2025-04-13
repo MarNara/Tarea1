@@ -22,7 +22,6 @@ Las funciones que funcionan correctamente son todas las de lista.h y la lista qu
 Y las de la cola.
 
 3.	un ejemplo mostrando como interactuar con la aplicación.
-Colocar el Id del paciente:
 
 -----------------------EJEMPLO opción 1---------------------------
 Ingrese su opci├│n: 1
